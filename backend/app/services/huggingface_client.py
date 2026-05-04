@@ -29,6 +29,10 @@ class HuggingFaceClient:
         }
 
         try:
+            if not settings.HUGGINGFACE_API_KEY or "placeholder" in settings.HUGGINGFACE_API_KEY:
+                print("Hugging Face API Key não configurada ou usando placeholder.")
+                return fallback_response
+
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
                     self.api_url,
@@ -40,6 +44,7 @@ class HuggingFaceClient:
                 )
                 
                 if response.status_code != 200:
+                    print(f"Erro na API do Hugging Face: {response.status_code} - {response.text}")
                     return fallback_response
 
                 result = response.json()
@@ -58,12 +63,14 @@ class HuggingFaceClient:
                     json_str = match.group(0)
                     try:
                         return json.loads(json_str)
-                    except json.JSONDecodeError:
+                    except json.JSONDecodeError as e:
+                        print(f"Erro ao decodificar JSON da IA: {e}")
                         pass
                 
                 return fallback_response
 
-        except Exception:
+        except Exception as e:
+            print(f"Erro inesperado no cliente Hugging Face: {e}")
             return fallback_response
 
 hf_client = HuggingFaceClient()

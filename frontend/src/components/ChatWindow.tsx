@@ -67,25 +67,25 @@ export default function ChatWindow() {
   };
 
   return (
-    <div className="flex flex-col h-full flex-1">
+    <div className="flex flex-col h-full flex-1 transition-colors duration-300">
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50"
+        className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50 dark:bg-slate-900/50"
       >
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center space-x-2">
-              <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-              <span className="text-sm text-slate-500">Analisando sintomas...</span>
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center space-x-2">
+              <Loader2 className="h-4 w-4 animate-spin text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-slate-500 dark:text-slate-400">Analisando sintomas...</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="p-4 bg-white border-t border-slate-100">
+      <div className="p-4 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800">
         <div className="flex space-x-2">
           <input
             type="text"
@@ -93,18 +93,18 @@ export default function ChatWindow() {
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ex: Estou com febre e dor de cabeça há 2 dias..."
-            className="flex-1 bg-slate-100 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="flex-1 bg-slate-100 dark:bg-slate-900 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
             aria-label="Enviar mensagem"
-            className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-blue-600 dark:bg-blue-500 text-white p-3 rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={20} />
           </button>
         </div>
-        <p className="text-[10px] text-slate-400 mt-2 text-center uppercase tracking-wider font-semibold">
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 text-center uppercase tracking-wider font-semibold">
           Aviso: Esta é uma ferramenta de orientação e não substitui consulta médica.
         </p>
       </div>

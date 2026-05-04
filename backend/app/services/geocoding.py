@@ -9,6 +9,8 @@ class GeocodingService:
     async def get_coordinates(self, cep: str) -> Optional[Tuple[float, float]]:
         params = {
             "postalcode": cep,
+            "city": "Fortaleza",
+            "state": "Ceará",
             "country": "Brasil",
             "format": "json"
         }

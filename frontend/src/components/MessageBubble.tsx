@@ -22,12 +22,12 @@ interface MessageBubbleProps {
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isBot = message.sender === "bot";
   const urgencyColors = [
-    "bg-slate-100 text-slate-600",
-    "bg-green-100 text-green-700",
-    "bg-yellow-100 text-yellow-700",
-    "bg-orange-100 text-orange-700",
-    "bg-red-100 text-red-700",
-    "bg-red-200 text-red-900 font-bold animate-pulse",
+    "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400",
+    "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+    "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
+    "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
+    "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+    "bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-100 font-bold animate-pulse",
   ];
 
   return (
@@ -35,7 +35,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       <div className={cn("flex max-w-[80%] space-x-2", isBot ? "flex-row" : "flex-row-reverse space-x-reverse")}>
         <div className={cn(
           "h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm",
-          isBot ? "bg-blue-600 text-white" : "bg-slate-200 text-slate-600"
+          isBot ? "bg-blue-600 text-white" : "bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
         )}>
           {isBot ? <Bot size={18} /> : <User size={18} />}
         </div>
@@ -43,7 +43,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         <div className="space-y-2">
           <div className={cn(
             "p-4 rounded-2xl shadow-sm text-sm leading-relaxed",
-            isBot ? "bg-white border border-slate-100 text-slate-800" : "bg-blue-600 text-white"
+            isBot ? "bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-800 dark:text-slate-200" : "bg-blue-600 text-white"
           )}>
             {message.text}
           </div>
@@ -51,7 +51,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           {isBot && message.metadata && (
             <div className="space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <div className={cn(
-                "p-3 rounded-xl border flex items-center space-x-3",
+                "p-3 rounded-xl border dark:border-slate-800 flex items-center space-x-3",
                 urgencyColors[message.metadata.urgencia] || urgencyColors[0]
               )}>
                 <AlertTriangle size={18} />
@@ -63,7 +63,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               
               <Link 
                 href="/ubs" 
-                className="inline-flex items-center space-x-2 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                className="inline-flex items-center space-x-2 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
               >
                 <MapPin size={14} />
                 <span>Ver UBS próximas em Fortaleza</span>
