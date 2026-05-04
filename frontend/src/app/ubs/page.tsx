@@ -9,7 +9,7 @@ import { fetchFromBackend } from "@/lib/api-client";
 const UbsMap = dynamic(() => import("@/components/UbsMap"), { 
   ssr: false,
   loading: () => (
-    <div className="h-[500px] w-full bg-slate-100 animate-pulse rounded-xl flex items-center justify-center">
+    <div className="h-[400px] md:h-[600px] w-full bg-slate-100 animate-pulse rounded-xl flex items-center justify-center">
       <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
     </div>
   )
@@ -54,14 +54,14 @@ export default function UbsPage() {
 
   return (
     <div className="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
+      <div className="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div className="max-w-xl">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">UBS Próximas</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">Encontre o atendimento mais perto de você em Fortaleza.</p>
+          <p className="text-slate-600 dark:text-slate-400 mt-2">Encontre o atendimento mais perto de você em Fortaleza através do seu CEP ou localização atual.</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 sm:flex-none">
             <input
               type="text"
               value={cep}
@@ -70,30 +70,33 @@ export default function UbsPage() {
               className="w-full sm:w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none text-slate-900 dark:text-slate-100"
             />
           </div>
-          <button
-            onClick={handleSearch}
-            disabled={isLoading}
-            className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search size={16} />}
-            <span>Buscar</span>
-          </button>
-          <button
-            onClick={handleGetCurrentLocation}
-            className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center space-x-2"
-          >
-            <MapPin size={16} />
-            <span>Usar minha localização</span>
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleSearch}
+              disabled={isLoading}
+              className="flex-1 sm:flex-none bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2"
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search size={16} />}
+              <span>Buscar</span>
+            </button>
+            <button
+              onClick={handleGetCurrentLocation}
+              className="p-2 sm:px-4 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center space-x-2"
+              title="Usar minha localização"
+            >
+              <MapPin size={16} />
+              <span className="hidden sm:inline">Usar minha localização</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800 overflow-hidden h-[600px]">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-800 overflow-hidden h-[400px] md:h-[600px] transition-all duration-300">
           <UbsMap ubsList={ubsList} center={userLocation} />
         </div>
 
-        <div className="space-y-4 overflow-y-auto max-h-[600px] pr-2">
+        <div className="space-y-4 overflow-y-auto max-h-[500px] lg:max-h-[600px] pr-2">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50 px-2">Resultados</h3>
           {ubsList.length === 0 ? (
             <div className="text-center py-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
