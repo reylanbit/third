@@ -44,14 +44,22 @@ class HuggingFaceClient:
 
                 result = response.json()
                 # O Mistral pode retornar uma lista de gerações ou o texto direto
-                generated_text = result[0].get('generated_text', '') if isinstance(result, list) else result.get('generated_text', '')
+                if isinstance(result, list) and len(result) > 0:
+                    generated_text = result[0].get('generated_text', '')
+                elif isinstance(result, dict):
+                    generated_text = result.get('generated_text', '')
+                else:
+                    generated_text = str(result)
                 
-                # Tenta extrair o JSON da resposta
-                start = generated_text.find('{')
-                end = generated_text.rfind('}') + 1
-                if start != -1 and end != -1:
-                    json_str = generated_text[start:end]
-                    return json.loads(json_str)
+                # Tenta extrair o JSON da resposta de forma mais robusta
+                import re
+                match = re.search(r'\{.*\}', generated_text, re.DOTALL)
+                if match:
+                    json_str = match.group(0)
+                    try:
+                        return json.loads(json_str)
+                    except json.JSONDecodeError:
+                        pass
                 
                 return fallback_response
 

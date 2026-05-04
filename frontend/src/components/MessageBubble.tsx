@@ -10,7 +10,7 @@ export interface Message {
   sender: "user" | "bot";
   timestamp: Date;
   metadata?: {
-    urgencia: int;
+    urgencia: number;
     recomendacao: string;
   };
 }

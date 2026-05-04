@@ -17,7 +17,7 @@ const UbsMap = dynamic(() => import("@/components/UbsMap"), {
 
 export default function UbsPage() {
   const [cep, setCep] = useState("");
-  const [ubsList, setUbsList] = useState([]);
+  const [ubsList, setUbsList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
@@ -63,7 +63,7 @@ export default function UbsPage() {
             <input
               type="text"
               value={cep}
-              onChange={(e) => setCep(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCep(e.target.value)}
               placeholder="Digite seu CEP"
               className="w-full sm:w-48 bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
@@ -99,7 +99,7 @@ export default function UbsPage() {
               <p className="text-sm text-slate-500">Nenhuma UBS encontrada. <br/>Faça uma busca por CEP ou localização.</p>
             </div>
           ) : (
-            ubsList.map((ubs, index) => (
+            ubsList.map((ubs: any, index: number) => (
               <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:border-blue-200 transition-colors group">
                 <h4 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{ubs.nome}</h4>
                 <p className="text-xs text-slate-500 mt-1">{ubs.endereco}</p>

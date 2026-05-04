@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import MessageBubble, { Message } from "./MessageBubble";
 import { Send, Loader2 } from "lucide-react";
-import { fetchFromBackend } from "@/lib/api-client";
+import { sendMessage } from "@/actions/chat";
 
 export default function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([
@@ -34,15 +34,12 @@ export default function ChatWindow() {
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev: Message[]) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      const data = await fetchFromBackend("/api/chat/", {
-        method: "POST",
-        body: JSON.stringify({ message: input }),
-      });
+      const data = await sendMessage(input);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -55,7 +52,7 @@ export default function ChatWindow() {
         },
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages((prev: Message[]) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -63,7 +60,7 @@ export default function ChatWindow() {
         sender: "bot",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev: Message[]) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -101,6 +98,7 @@ export default function ChatWindow() {
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
+            aria-label="Enviar mensagem"
             className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={20} />
