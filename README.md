@@ -67,4 +67,4 @@ npm run dev
 Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 ---
-Desenvolvido como um projeto de Portfólio Senior.
+Desenvolvido por [Reylan](https://github.com/reylanbit).
