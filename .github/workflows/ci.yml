@@ -24,6 +24,12 @@ jobs:
         run: |
           cd backend
           pytest
+        env:
+          PYTHONPATH: .
+          HUGGINGFACE_API_KEY: hf_test_token
+          UPSTASH_REDIS_URL: redis://localhost:6379
+          DATABASE_URL: sqlite:///./test.db
+          ENVIRONMENT: testing
 
   frontend-build:
     runs-on: ubuntu-latest
