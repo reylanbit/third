@@ -14,17 +14,29 @@ class HuggingFaceClient:
         if not settings.HUGGINGFACE_API_KEY or "placeholder" in settings.HUGGINGFACE_API_KEY or "hf_xxxx" in settings.HUGGINGFACE_API_KEY:
             return self._mock_triage(texto)
 
-        prompt = f"""Você é um assistente médico virtual. Com base nos sintomas descritos, forneça:
-        1) Um resumo clínico simples (máximo 200 caracteres).
-        2) Uma classificação de urgência de 1 a 5, onde:
-            1: não urgente, pode agendar consulta eletiva;
-            2: pouco urgente, orientação em UBS em até 72h;
-            3: urgência moderada, procurar UBS em até 24h;
-            4: urgente, procurar UPA em até 2h;
-            5: emergência, ligar para SAMU 192 imediatamente.
-        3) Uma recomendação final.
-        Responda NO FORMATO JSON exato: {{"resumo": "...", "urgencia": <int>, "recomendacao": "..."}}
-        Sintomas: '{texto}'
+        prompt = f"""Você é um Médico Especialista com Mestrado e Doutorado em Saúde Pública e Emergências Clínicas. 
+        Sua tarefa é realizar uma triagem clínica rigorosa e humanizada baseada no Protocolo de Manchester.
+
+        DIRETRIZES DE ANÁLISE:
+        1. Identifique sinais de alerta (red flags) imediatamente.
+        2. Avalie a cronicidade vs. agudização dos sintomas.
+        3. Considere o impacto funcional relatado.
+
+        CLASSIFICAÇÃO DE RISCO (1-5):
+        - 5 (VERMELHO): Emergência imediata. Risco de vida. Ex: Infarto, AVC, obstrução de via aérea, choque.
+        - 4 (LARANJA): Muito Urgente. Risco de agravamento rápido. Ex: Dor intensa, fraturas expostas, febre altíssima persistente.
+        - 3 (AMARELO): Urgente. Gravidade moderada. Ex: Crise hipertensiva leve, vômitos incoercíveis, dor moderada.
+        - 2 (VERDE): Pouco Urgente. Baixo risco. Ex: Sintomas virais leves, dores crônicas sem alteração aguda.
+        - 1 (AZUL): Não Urgente. Casos eletivos. Ex: Troca de receitas, sintomas leves há longa data.
+
+        FORMATO DE RESPOSTA (JSON APENAS):
+        {{
+            "resumo": "Síntese técnica e profissional do quadro clínico (máx 200 carac).",
+            "urgencia": <int de 1 a 5>,
+            "recomendacao": "Conduta médica precisa: local de atendimento (SAMU, UPA, UBS) e tempo sugerido."
+        }}
+
+        SINTOMAS DO PACIENTE: '{texto}'
         """
         
         fallback_response = self._mock_triage(texto)
@@ -69,36 +81,46 @@ class HuggingFaceClient:
     def _mock_triage(self, texto: str) -> Dict[str, Any]:
         texto_lower = texto.lower()
         
-        # Lógica simples de palavras-chave para demonstração (Mock)
-        if any(w in texto_lower for w in ["dor no peito", "falta de ar", "desmai", "infarto", "parada"]):
+        # Lógica de Triagem Acadêmica (Protocolo de Manchester Adaptado)
+        
+        # PRIORIDADE 5 - EMERGÊNCIA (VERMELHO)
+        if any(w in texto_lower for w in ["dor no peito", "falta de ar", "desmai", "infarto", "parada", "consciência", "convulsão"]):
             return {
-                "resumo": "Sintomas de ALTA GRAVIDADE detectados.",
+                "resumo": "Quadro clínico compatível com Emergência de Alta Complexidade.",
                 "urgencia": 5,
-                "recomendacao": "EMERGÊNCIA: Ligue para o SAMU 192 imediatamente ou vá ao pronto-socorro mais próximo."
+                "recomendacao": "EMERGÊNCIA: Acione o SAMU 192 imediatamente ou dirija-se ao Hospital de Emergência mais próximo. Risco de vida iminente."
             }
-        elif any(w in texto_lower for w in ["sangue", "fratura", "corte profundo", "acidente"]):
+        
+        # PRIORIDADE 4 - MUITO URGENTE (LARANJA)
+        elif any(w in texto_lower for w in ["sangue", "fratura", "corte profundo", "acidente", "queimadura grave", "hemorragia"]):
             return {
-                "resumo": "Lesão traumática ou sangramento significativo.",
+                "resumo": "Trauma agudo ou instabilidade clínica moderada detectada.",
                 "urgencia": 4,
-                "recomendacao": "URGENTE: Procure uma UPA ou hospital em até 2 horas."
+                "recomendacao": "MUITO URGENTE: Procure uma Unidade de Pronto Atendimento (UPA) imediatamente. Tempo de espera sugerido: < 10min."
             }
-        elif any(w in texto_lower for w in ["febre alta", "dor forte", "vômito", "diarreia intensa"]):
+        
+        # PRIORIDADE 3 - URGENTE (AMARELO)
+        elif any(w in texto_lower for w in ["febre alta", "dor forte", "vômito", "diarreia intensa", "crise de ansiedade", "pressão alta"]):
             return {
-                "resumo": "Sintomas de urgência moderada.",
+                "resumo": "Sintomatologia aguda com necessidade de intervenção terapêutica em curto prazo.",
                 "urgencia": 3,
-                "recomendacao": "Procure uma Unidade Básica de Saúde (UBS) ou UPA em até 24 horas."
+                "recomendacao": "URGENTE: Procure uma UPA ou sua UBS de referência em até 24 horas para avaliação clínica presencial."
             }
-        elif any(w in texto_lower for w in ["gripe", "tosse", "resfriado", "dor leve", "garganta"]):
+        
+        # PRIORIDADE 2 - POUCO URGENTE (VERDE)
+        elif any(w in texto_lower for w in ["gripe", "tosse", "resfriado", "dor leve", "garganta", "coriza", "ouvido"]):
             return {
-                "resumo": "Sintomas leves sugestivos de quadro viral ou inflamação simples.",
+                "resumo": "Quadro clínico de baixa complexidade sugestivo de etiologia viral ou inflamatória leve.",
                 "urgencia": 2,
-                "recomendacao": "Procure orientação em uma UBS em até 72 horas. Repouse e hidrate-se."
+                "recomendacao": "POUCO URGENTE: Atendimento em Unidade Básica de Saúde (UBS). Mantenha hidratação vigorosa e repouse."
             }
+        
+        # PRIORIDADE 1 - NÃO URGENTE (AZUL)
         else:
             return {
-                "resumo": "Relato de sintomas recebido para análise.",
+                "resumo": "Sintomas inespecíficos ou condições crônicas sem sinais de agudização.",
                 "urgencia": 1,
-                "recomendacao": "Caso os sintomas persistam ou piorem, agende uma consulta na sua UBS de referência."
+                "recomendacao": "NÃO URGENTE: Agende uma consulta eletiva com seu médico de família na UBS. Monitore os sintomas."
             }
 
 hf_client = HuggingFaceClient()

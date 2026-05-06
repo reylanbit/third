@@ -8,28 +8,26 @@
   <img src="https://img.shields.io/badge/UI-Dark%20Mode-orange" alt="Dark Mode" />
 </p>
 
-**Fala, Doutor** é uma plataforma inteligente desenvolvida para auxiliar cidadãos de Fortaleza/CE. O projeto combina Inteligência Artificial avançada com geolocalização para oferecer uma triagem de saúde rápida, acessível e humana.
+**Fala, Doutor** é uma plataforma de teleorientação projetada para otimizar o fluxo de atendimento básico em Fortaleza/CE. Através da integração de modelos de linguagem de larga escala e serviços de geolocalização, a aplicação oferece um primeiro contato ágil, auxiliando na identificação de quadros clínicos e no direcionamento adequado à rede de saúde.
 
-## 🌟 O que você irá experienciar?
+## 🌟 Proposta de Valor
 
-Ao utilizar o **Fala, Doutor**, o usuário passa por uma jornada fluida e intuitiva:
+A arquitetura do **Fala, Doutor** foi pensada para oferecer uma experiência de usuário técnica e eficiente:
 
-### 1. 🧠 Triagem Inteligente e Humanizada
-Esqueça formulários rígidos. Você descreve o que está sentindo em linguagem natural (ex: *"Estou com uma dor de cabeça que lateja e um pouco de febre desde ontem"*). Nossa IA, baseada no modelo **Mistral 7B**, analisa seu relato e fornece:
-- **Resumo Clínico**: Uma síntese clara do que foi relatado.
-- **Classificação de Urgência**: Uma escala visual de 1 a 5 para ajudar você a entender a gravidade.
-- **Recomendação Personalizada**: Orientações baseadas nos protocolos de saúde (ex: procurar uma UBS em 24h ou ligar para o SAMU 192).
+### 1. 🧠 Processamento de Linguagem Natural para Triagem
+O sistema interpreta relatos em linguagem natural, eliminando a barreira de formulários estáticos. A integração com o modelo **Mistral 7B** permite uma análise semântica profunda para gerar:
+- **Síntese Clínica**: Resumo técnico dos pontos chaves do relato.
+- **Estratificação de Risco**: Classificação baseada em protocolos clínicos internacionais.
+- **Direcionamento Resolutivo**: Condutas específicas baseadas na urgência identificada.
 
-### 2. 🗺️ Localização Estratégica de Saúde
-Não sabe onde ir? O sistema identifica as **Unidades Básicas de Saúde (UBS) de Fortaleza** mais próximas de você através do seu CEP ou localização GPS em tempo real. O mapa interativo permite visualizar a rota e a distância exata até o posto de saúde.
+### 2. 🗺️ Geolocalização e Gestão de Rede
+Utiliza APIs de geolocalização para mapear em tempo real as **Unidades Básicas de Saúde (UBS)** mais próximas. O sistema calcula rotas e distâncias, servindo como uma ferramenta de logística de saúde para o cidadão.
 
-### 3. 🌓 Interface Adaptável (Dark Mode)
-Uma experiência confortável em qualquer horário. Com o novo **Modo Escuro**, você pode realizar sua triagem durante a noite sem cansaço visual, alternando facilmente entre os temas com um único clique.
+### 3. 🌓 Design de Interface Adaptativo
+Implementação de um sistema de design resiliente com suporte nativo a **Dark Mode**, focado em acessibilidade e conforto visual em diferentes cenários de uso.
 
-### 4. 📄 Seu Histórico na Palma da Mão
-Todas as suas triagens ficam salvas. Você pode:
-- Revisar orientações passadas.
-- **Exportar para PDF**: Gere um documento profissional com o resumo da IA para mostrar ao médico durante a consulta, facilitando o diagnóstico.
+### 4. 📄 Persistência e Portabilidade de Dados
+Gestão de histórico de triagens com capacidade de exportação para **PDF**, permitindo que o usuário transporte informações estruturadas para consultas presenciais, otimizando o tempo do profissional de saúde.
 
 ## 🚀 Tecnologias de Ponta
 
