@@ -68,7 +68,12 @@ class HuggingFaceClient:
                 if match:
                     json_str = match.group(0)
                     try:
-                        return json.loads(json_str)
+                        data = json.loads(json_str)
+                        if isinstance(data, dict):
+                            for key in list(data.keys()):
+                                if key in ['__proto__', 'constructor', 'prototype']:
+                                    del data[key]
+                        return data
                     except json.JSONDecodeError as e:
                         print(f"Erro ao decodificar JSON da IA: {e}")
                 

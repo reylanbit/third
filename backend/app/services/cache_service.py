@@ -11,7 +11,14 @@ class CacheService:
         key = hashlib.sha256(message.encode()).hexdigest()
         try:
             cached = await self.redis.get(key)
-            return json.loads(cached) if cached else None
+            if not cached:
+                return None
+            data = json.loads(cached)
+            if isinstance(data, dict):
+                for key in list(data.keys()):
+                    if key in ['__proto__', 'constructor', 'prototype']:
+                        del data[key]
+            return data
         except Exception as e:
             print(f"Cache get error: {e}")
             return None
