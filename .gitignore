@@ -34,3 +34,6 @@ Thumbs.db
 # Project specific
 backend/data/ubs_fortaleza.json
 !backend/data/.gitkeep
+# Database files
+*.db
+fala_doutor.db
